@@ -1,23 +1,56 @@
-import { View, Text, StyleSheet, Dimensions, TextInput, TextInputProps } from "react-native";
-import { colors } from "../constants";
+import React, {useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TextInput,
+  TextInputProps,
+  Pressable,
+} from 'react-native';
+import {colors} from '../constants';
 
 interface InputFieldProps extends TextInputProps {
   disabled?: boolean;
-
+  error?: string;
+  touched?: boolean;
 }
 
 const deviceHeight = Dimensions.get('screen').height;
 
-function InputField({disabled = false, ...props}: InputFieldProps) {
+function InputField({
+  disabled = false,
+  error,
+  touched,
+  ...props
+}: InputFieldProps) {
+  const innerRef = useRef<TextInput | null>(null);
+
+  const handlePressInput = () => {
+    innerRef.current?.focus();
+  };
+
   return (
-    <View style={[styles.container, disabled && styles.disabled]}>
-      <TextInput
-        editable={!disabled}
-        placeholderTextColor={colors.GRAY_500}
-        style={[styles.input, disabled && styles.disabled]}
-        {...props}
-      />
-    </View>
+    <Pressable onPress={handlePressInput}>
+      <View
+        style={[
+          styles.container,
+          disabled && styles.disabled,
+          touched && Boolean(error) && styles.inputError,
+        ]}>
+        <TextInput
+          ref={innerRef}
+          editable={!disabled}
+          placeholderTextColor={colors.GRAY_500}
+          style={[styles.input, disabled && styles.disabled]}
+          autoCapitalize="none"
+          spellCheck={false}
+          autoCorrect={false}
+          {...props}
+        />
+        {touched && Boolean(error) && <Text style={styles.error}>{error}</Text>}
+      </View>
+    </Pressable>
   );
 }
 
@@ -36,7 +69,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.GRAY_200,
     color: colors.GRAY_700,
   },
+  inputError: {
+    borderWidth: 1,
+    borderColor: colors.RED_300,
+  },
+  error: {
+    color: colors.RED_500,
+    fontSize: 12,
+    paddingTop: 5,
+  },
 });
-
 
 export default InputField;
