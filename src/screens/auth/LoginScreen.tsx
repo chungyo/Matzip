@@ -1,16 +1,16 @@
-import { SafeAreaView, StyleSheet, TextInput, View } from "react-native";
-import InputField from "../../components/InputField";
-import CustomButton from "../../components/CustomButton";
-import useForm from "../../hooks/useForm";
-import {validateLogin} from "../../utils";
-import { useRef } from "react";
-import useAuth from "../../hooks/queries/useAuth";
+import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
+import InputField from '../../components/InputField';
+import CustomButton from '../../components/CustomButton';
+import useForm from '../../hooks/useForm';
+import {validateLogin} from '../../utils';
+import {useRef} from 'react';
+import useAuth from '../../hooks/queries/useAuth';
 
 function LoginScreen() {
   const passwordRef = useRef<TextInput | null>(null);
   const {loginMutation} = useAuth();
   const login = useForm({
-    initialValue: { email: '', password: ''},
+    initialValue: {email: '', password: ''},
     validate: validateLogin,
   });
 
@@ -27,7 +27,7 @@ function LoginScreen() {
           error={login.errors.email}
           touched={login.touched.email}
           inputMode="email"
-          returnKeyType='next'
+          returnKeyType="next"
           blurOnSubmit={false}
           onSubmitEditing={() => passwordRef.current?.focus()}
           {...login.getTextInputProps('email')}
@@ -57,13 +57,12 @@ function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 30
+    margin: 30,
   },
   inputContainer: {
     gap: 20,
-    marginBottom: 30
-  }
-
+    marginBottom: 30,
+  },
 });
 
 export default LoginScreen;

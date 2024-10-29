@@ -9,10 +9,10 @@ import queryClient from "../../api/queryClient";
 
 
 //v5
-function useSignup(mutationOptions?: Omit<UseMutationCustomOptions, "mutationFn">) {
+function useSignup(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: postSignup,
-    ...mutationOptions
+    ...mutationOptions,
   });
 }
 
@@ -21,14 +21,13 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
     mutationFn: postLogin,
     onSuccess: ({ accessToken, refreshToken }) => {
       setEncryptStorage("refreshToken", refreshToken);
-      setHeader("Authorization", `Bearer $ {accessToken}`);
-      axiosInstance.defaults.headers.common["Authorization"] = accessToken;
+      setHeader("Authorization", `Bearer ${accessToken}`);
     },
     onSettled: () => {
-      queryClient.refetchQueries({queryKey: ["auth", "getAccessToken"]});
-      queryClient.invalidateQueries({queryKey: ["auth", "getProfile"]});
+      queryClient.refetchQueries({ queryKey: ["auth", "getAccessToken"] });
+      queryClient.invalidateQueries({ queryKey: ["auth", "getProfile"] });
     },
-    ...mutationOptions
+    ...mutationOptions,
   });
 }
 
@@ -43,23 +42,21 @@ function useGetRefreshToken() {
   });
 
   useEffect(() => {
-    if(isSuccess) {
-      setHeader('Authorization', `Bearer $ {data.accessToken}`);
-      setEncryptStorage('refreshToken', data.refreshToken);
+    if (isSuccess) {
+      setHeader("Authorization", `Bearer $ {data.accessToken}`);
+      setEncryptStorage("refreshToken", data.refreshToken);
     }
   }, [isSuccess]);
 
   useEffect(() => {
-    if(isError) {
-      removeHeader('Authorization');
-      removeEncryptStorage('refreshToken');
+    if (isError) {
+      removeHeader("Authorization");
+      removeEncryptStorage("refreshToken");
     }
   }, [isError]);
 
   return { isSuccess, isError };
 }
-
-
 
 function useGetProfile(queryOptions?: UseQueryCustomOptions) {
   return useQuery({
@@ -69,17 +66,17 @@ function useGetProfile(queryOptions?: UseQueryCustomOptions) {
   });
 }
 
-function useLogout(mutationOptions?: UseMutationCustomOptions){
+function useLogout(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      removeHeader('Authorization');
-      removeEncryptStorage('refreshToken');
+      removeHeader("Authorization");
+      removeEncryptStorage("refreshToken");
     },
     onSettled: () => {
-      queryClient.invalidateQueries({queryKey: ["auth"]});
+      queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
-    ...mutationOptions,
+    ...mutationOptions
   });
 }
 
@@ -93,7 +90,7 @@ function useAuth() {
   const loginMutation = useLogin();
   const logoutMutation = useLogout();
 
-  return { signupMutation, loginMutation, isLogin, getProfileQuery, logoutMutation};
+  return { signupMutation, loginMutation, isLogin, getProfileQuery, logoutMutation };
 }
 
 export default useAuth;

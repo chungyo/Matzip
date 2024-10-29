@@ -1,30 +1,32 @@
-import React, { useRef } from "react";
-import { SafeAreaView, StyleSheet, TextInput, View } from "react-native";
-import InputField from "../../components/InputField";
-import useForm from "../../hooks/useForm";
-import CustomButton from "../../components/CustomButton";
-import { validateSignup } from "../../utils";
-import useAuth from "../../hooks/queries/useAuth";
-
+import React, {useRef} from 'react';
+import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
+import InputField from '../../components/InputField';
+import useForm from '../../hooks/useForm';
+import CustomButton from '../../components/CustomButton';
+import {validateSignup} from '../../utils';
+import useAuth from '../../hooks/queries/useAuth';
 
 function SignupScreen() {
   const passwordRef = useRef<TextInput | null>(null);
   const passwordConfirmRef = useRef<TextInput | null>(null);
-  const { signupMutation, loginMutation } = useAuth();
+  const {signupMutation, loginMutation} = useAuth();
 
   const signup = useForm({
-    initialValue: { email: "", password: "", passwordConfirm: "" },
+    initialValue: {email: '', password: '', passwordConfirm: ''},
     validate: validateSignup,
   });
 
   const handleSubmit = () => {
-    const {email, password} = signup.values
+    const {email, password} = signup.values;
 
-    signupMutation.mutate({email, password},{
-      onSuccess: () => {
-        loginMutation.mutate({email, password});
+    signupMutation.mutate(
+      {email, password},
+      {
+        onSuccess: () => {
+          loginMutation.mutate({email, password});
+        },
       },
-    });
+    );
   };
 
   return (
@@ -35,11 +37,11 @@ function SignupScreen() {
           placeholder="이메일"
           error={signup.errors.email}
           touched={signup.touched.email}
-          returnKeyType={"next"}
+          returnKeyType={'next'}
           blurOnSubmit={false}
           onSubmitEditing={() => passwordRef.current?.focus()}
           inputMode="email"
-          {...signup.getTextInputProps("email")}
+          {...signup.getTextInputProps('email')}
         />
         <InputField
           ref={passwordRef}
@@ -48,10 +50,10 @@ function SignupScreen() {
           error={signup.errors.password}
           touched={signup.touched.password}
           secureTextEntry
-          returnKeyType={"next"}
+          returnKeyType={'next'}
           blurOnSubmit={false}
           onSubmitEditing={() => passwordConfirmRef.current?.focus()}
-          {...signup.getTextInputProps("password")}
+          {...signup.getTextInputProps('password')}
         />
         <InputField
           ref={passwordConfirmRef}
@@ -60,10 +62,10 @@ function SignupScreen() {
           touched={signup.touched.passwordConfirm}
           secureTextEntry
           onSubmitEditing={handleSubmit}
-          {...signup.getTextInputProps("passwordConfirm")}
+          {...signup.getTextInputProps('passwordConfirm')}
         />
       </View>
-      <CustomButton label={"회원가입"} onPress={handleSubmit} />
+      <CustomButton label={'회원가입'} onPress={handleSubmit} />
     </SafeAreaView>
   );
 }
@@ -71,12 +73,12 @@ function SignupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 30
+    margin: 30,
   },
   inputContainer: {
     gap: 20,
-    margin: 30
-  }
+    margin: 30,
+  },
 });
 
 export default SignupScreen;

@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { QueryKey, UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
+import { QueryKey, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 
 type ResponseError = AxiosError<{
   statusCode: number;
@@ -9,9 +9,8 @@ type ResponseError = AxiosError<{
 
 type UseMutationCustomOptions<TData = unknown, TVariables = unknown> = Omit<
   UseMutationOptions<TData, ResponseError, TVariables, unknown>,
-  "mutationFn"
+  'mutationFn'
 >;
-
 
 type UseQueryCustomOptions<TQueryFnData = unknown, TData = TQueryFnData> = Omit<
   UseQueryOptions<TQueryFnData, ResponseError, TData, QueryKey>,
